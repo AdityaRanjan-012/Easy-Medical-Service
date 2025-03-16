@@ -20,6 +20,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Ranjan Medical Service');
+});
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) {
   throw new Error('MONGO_URI is not defined in the environment variables');
