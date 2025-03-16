@@ -1,11 +1,12 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  googleId: { type: String, required: true, unique: true }, // Google Authentication ID
+  googleId: { type: String, unique: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  password: { type: String }, // Required for manual signup
   role: { type: String, enum: ["customer", "hospital_admin", "doctor_admin"], required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("User", userSchema);
+export default mongoose.model("User", userSchema); // ✅ Use 'export default'

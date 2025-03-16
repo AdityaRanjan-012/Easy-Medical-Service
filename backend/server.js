@@ -12,6 +12,7 @@ import authRoutes from './routes/authRoutes.js';
 import ambulanceRoutes from './routes/ambulanceRoutes.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import hospitalRoutes from './routes/hospitalRoutes.js';
+import userRoutes from "./routes/userRoutes.js";
 
 
 dotenv.config();
@@ -40,6 +41,7 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use("/users", userRoutes);
 app.use('/auth', authRoutes);
 app.use('/ambulance', ambulanceRoutes);
 app.use('/appointments', appointmentRoutes);
