@@ -1,34 +1,17 @@
-const Doctor = require("../models/Doctor");
-const Hospital = require("../models/Hospital");
+import Appointment from "../models/Appointment.js";
 
-exports.addDoctor = async (req, res) => {
-  try {
-    const { name, specialization, hospitalId, availability } = req.body;
-    
-    const hospital = await Hospital.findById(hospitalId);
-    if (!hospital) return res.status(404).json({ message: "Hospital not found" });
+// Get all appointments for a doctor
+export const getDoctorAppointments = async (req, res) => {
+    try {
+        const { doctorId } = req.params;
+        const appointments = await Appointment.find({ doctor: doctorId }).populate("customer", "name email");
 
-    const doctor = new Doctor({ name, specialization, hospital: hospitalId, availability });
-    await doctor.save();
+        if (!appointments.length) {
+            return res.status(404).json({ message: "No appointments found for this doctor" });
+        }
 
-    hospital.doctors.push(doctor._id);
-    await hospital.save();
-
-    res.status(201).json({ message: "Doctor added successfully", doctor });
-  } catch (error) {
-    res.status(500).json({ message: "Error adding doctor", error: error.message });
-  }
-};
-
-exports.getDoctorsByHospital = async (req, res) => {
-  try {
-    const { hospitalId } = req.params;
-    const doctors = await Doctor.find({ hospital: hospitalId });
-
-    if (!doctors.length) return res.status(404).json({ message: "No doctors found in this hospital" });
-
-    res.json(doctors);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
+        res.status(200).json({ doctorId, appointments });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
 };

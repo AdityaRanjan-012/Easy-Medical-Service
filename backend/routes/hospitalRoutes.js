@@ -1,10 +1,8 @@
-import express from 'express';
+import express from "express";
+import { getDoctorAppointments } from "../controllers/doctorController.js";
 
 const router = express.Router();
 
-router.get('/list', (req, res) => {
-  // Fetch list of hospitals
-  res.json({ hospitals: ['Hospital A', 'Hospital B'] });
-});
+router.get("/:doctorId/appointments", getDoctorAppointments);
 
 export default router;
