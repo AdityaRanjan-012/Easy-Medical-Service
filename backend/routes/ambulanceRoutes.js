@@ -1,11 +1,8 @@
-import express from 'express';
-
+const express = require('express');
 const router = express.Router();
+const { dispatchAmbulance } = require('../controllers/ambulanceController');
+const auth = require('../middleware/auth');
 
-router.post('/request', (req, res) => {
-  const { location } = req.body;
-  // Logic to find nearest hospital and send an ambulance
-  res.json({ message: 'Ambulance dispatched!', location });
-});
+router.post('/dispatch', auth, dispatchAmbulance);
 
-export default router;
+module.exports = router;

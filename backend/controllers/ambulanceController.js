@@ -1,31 +1,100 @@
-const AmbulanceBooking = require("../models/AmbulanceBooking");
+const City = require('../models/City');
+const Hospital = require('../models/Hospital');
+const Ambulance = require('../models/Ambulance');
 
-exports.bookAmbulance = async (req, res) => {  // acc to hospital
-  try {
-    const { customerId, hospitalId } = req.body;
+// BFS to find shortest paths
+const findShortestPath = async (startCity) => {
+  const cities = await City.find();
+  const graph = cities.reduce((acc, city) => {
+    acc[city.name] = city.neighbors;
+    return acc;
+  }, {});
 
-    const booking = new AmbulanceBooking({ customer: customerId, hospital: hospitalId });
-    await booking.save();
+  const visited = new Map();
+  const distance = new Map();
+  const queue = [];
 
-    res.status(201).json({ message: "Ambulance booked successfully", booking });
-  } catch (error) {
-    res.status(500).json({ message: "Error booking ambulance", error: error.message });
+  for (const city of cities) {
+    visited.set(city.name, false);
+    distance.set(city.name, Infinity);
   }
+
+  queue.push(startCity);
+  visited.set(startCity, true);
+  distance.set(startCity, 0);
+
+  while (queue.length > 0) {
+    const currentCity = queue.shift();
+    const neighbors = graph[currentCity] || [];
+
+    for (const neighbor of neighbors) {
+      if (!visited.get(neighbor)) {
+        visited.set(neighbor, true);
+        distance.set(neighbor, distance.get(currentCity) + 5);
+        queue.push(neighbor);
+      }
+    }
+  }
+
+  return distance;
 };
 
-exports.updateAmbulanceStatus = async (req, res) => {
+// Rank hospitals
+const rankHospitals = async (distance) => {
+  const hospitals = await Hospital.find();
+  const rankedHospitals = [];
+
+  for (const hospital of hospitals) {
+    const dist = distance.get(hospital.city);
+    if (dist !== Infinity) {
+      rankedHospitals.push({
+        hospital: hospital,
+        distance: dist,
+      });
+    }
+  }
+
+  rankedHospitals.sort((a, b) => {
+    if (a.distance === b.distance) return a.hospital.rank - b.hospital.rank;
+    return a.distance - b.distance;
+  });
+
+  return rankedHospitals;
+};
+
+exports.dispatchAmbulance = async (req, res) => {
+  const { startCity } = req.body;
+
   try {
-    const { bookingId } = req.params;
-    const { status } = req.body;
+    const cityExists = await City.findOne({ name: startCity });
+    if (!cityExists) {
+      return res.status(404).json({ msg: 'City not found' });
+    }
 
-    const booking = await AmbulanceBooking.findById(bookingId);
-    if (!booking) return res.status(404).json({ message: "Booking not found" });
+    const distance = await findShortestPath(startCity);
+    const rankedHospitals = await rankHospitals(distance);
 
-    booking.status = status;
-    await booking.save();
+    if (rankedHospitals.length === 0) {
+      return res.status(404).json({ msg: 'No reachable hospitals found' });
+    }
 
-    res.json({ message: "Ambulance status updated", booking });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    const bestHospital = rankedHospitals[0].hospital;
+    const bestDistance = rankedHospitals[0].distance;
+
+    const ambulance = await Ambulance.findOne({ hospital: bestHospital._id, isAvailable: true });
+    if (!ambulance) {
+      return res.status(400).json({ msg: 'No available ambulances at the nearest hospital' });
+    }
+
+    ambulance.isAvailable = false;
+    await ambulance.save();
+
+    res.json({
+      message: `Ambulance dispatched from ${bestHospital.city}`,
+      distance: bestDistance,
+      emergencyNumber: bestHospital.emergencyNumber,
+    });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
   }
 };

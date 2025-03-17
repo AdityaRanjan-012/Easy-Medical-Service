@@ -1,59 +1,39 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import passport from 'passport';
-import session from 'express-session';
-import { Server } from 'socket.io';
-import http from 'http';
-import './config/passport.js'; 
-
-import authRoutes from './routes/authRoutes.js';
-import ambulanceRoutes from './routes/ambulanceRoutes.js';
-import appointmentRoutes from './routes/appointmentRoutes.js';
-import hospitalRoutes from './routes/hospitalRoutes.js';
-import userRoutes from "./routes/userRoutes.js";
-
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const passport = require('passport');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
+// Import routes
+const ambulanceRoutes = require('./routes/ambulanceRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+const authRoutes = require('./routes/authRoutes');
+const doctorRoutes = require('./routes/doctorRoutes');
+const hospitalRoutes = require('./routes/hospitalRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
 
-
-app.get('/', (req, res) => {
-  res.send('Welcome to Ranjan Medical Service');
-});
-const mongoUri = process.env.MONGO_URI;
-if (!mongoUri) {
-  throw new Error('MONGO_URI is not defined in the environment variables');
-}
-console.log(mongoUri);
-
-mongoose.connect(mongoUri, {
-}).then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error(err));
-
+// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
-app.use(passport.session());
+require('./config/passport')(passport);
 
-app.use("/users", userRoutes);
-app.use('/auth', authRoutes);
-app.use('/ambulance', ambulanceRoutes);
-app.use('/appointments', appointmentRoutes);
-app.use('/hospitals', hospitalRoutes);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI,)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('notify', (data) => {
-    io.emit('notification', data);
-  });
-  socket.on('disconnect', () => console.log('User disconnected'));
-});
+// Routes
+app.use('/api/ambulance', ambulanceRoutes);
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use('/api/hospitals', hospitalRoutes);
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,30 +1,59 @@
-import Hospital from "../models/Hospital.js";
-import Doctor from "../models/Doctor.js";
+const Hospital = require('../models/Hospital');
+const Doctor = require('../models/Doctor');
+const Ambulance = require('../models/Ambulance');
 
-// Assign a doctor to an illness in a hospital
-export const assignDoctorToIllness = async (req, res) => {
-    try {
-        const { hospitalId } = req.params;
-        const { doctorId, illness } = req.body;
+exports.addDoctor = async (req, res) => {
+  const { name, specialties } = req.body;
+  const hospitalId = req.user.id;
 
-        // Check if hospital exists
-        const hospital = await Hospital.findById(hospitalId);
-        if (!hospital) {
-            return res.status(404).json({ message: "Hospital not found" });
-        }
-
-        // Check if doctor exists
-        const doctor = await Doctor.findById(doctorId);
-        if (!doctor) {
-            return res.status(404).json({ message: "Doctor not found" });
-        }
-
-        // Assign doctor to illness
-        hospital.doctors.push({ doctor: doctorId, illness });
-        await hospital.save();
-
-        res.status(200).json({ message: "Doctor assigned to illness successfully", hospital });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+  try {
+    const hospital = await Hospital.findById(hospitalId);
+    if (!hospital) {
+      return res.status(404).json({ msg: 'Hospital not found' });
     }
+
+    const doctor = new Doctor({
+      name,
+      hospital: hospitalId,
+      specialties,
+    });
+    await doctor.save();
+
+    hospital.doctors.push(doctor._id);
+    await hospital.save();
+
+    res.json({ msg: 'Doctor added successfully', doctor });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+exports.updateAmbulanceCount = async (req, res) => {
+  const { count } = req.body;
+  const hospitalId = req.user.id;
+
+  try {
+    const hospital = await Hospital.findById(hospitalId);
+    if (!hospital) {
+      return res.status(404).json({ msg: 'Hospital not found' });
+    }
+
+    hospital.ambulances = count;
+    await hospital.save();
+
+    const existingAmbulances = await Ambulance.find({ hospital: hospitalId });
+    if (existingAmbulances.length < count) {
+      for (let i = existingAmbulances.length; i < count; i++) {
+        const ambulance = new Ambulance({ hospital: hospitalId });
+        await ambulance.save();
+      }
+    } else if (existingAmbulances.length > count) {
+      const toDelete = existingAmbulances.slice(count);
+      await Ambulance.deleteMany({ _id: { $in: toDelete.map(a => a._id) } });
+    }
+
+    res.json({ msg: 'Ambulance count updated' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
 };

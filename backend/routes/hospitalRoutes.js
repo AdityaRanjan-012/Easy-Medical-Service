@@ -1,8 +1,9 @@
-import express from "express";
-import { getDoctorAppointments } from "../controllers/doctorController.js";
-
+const express = require('express');
 const router = express.Router();
+const { addDoctor, updateAmbulanceCount } = require('../controllers/hospitalController');
+const auth = require('../middleware/auth');
 
-router.get("/:doctorId/appointments", getDoctorAppointments);
+router.post('/doctors', auth, addDoctor);
+router.put('/ambulances', auth, updateAmbulanceCount);
 
-export default router;
+module.exports = router;

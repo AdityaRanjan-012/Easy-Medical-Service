@@ -1,10 +1,9 @@
-import express from 'express';
-
+const express = require('express');
 const router = express.Router();
+const { bookAppointment, getAppointments } = require('../controllers/appointmentController');
+const auth = require('../middleware/auth');
 
-router.get('/list', (req, res) => {
-  // Fetch list of hospitals
-  res.json({ hospitals: ['Hospital A', 'Hospital B'] });
-});
+router.post('/book', auth, bookAppointment);
+router.get('/', auth, getAppointments);
 
-export default router;
+module.exports = router;

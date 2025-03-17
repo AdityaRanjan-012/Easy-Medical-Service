@@ -1,12 +1,27 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  googleId: { type: String, unique: true },
+const UserSchema = new mongoose.Schema({
+  googleId: { type: String, required: false }, // Optional for manual signup
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String }, // Required for manual signup
-  role: { type: String, enum: ["customer", "hospital_admin", "doctor_admin"], required: true },
-  createdAt: { type: Date, default: Date.now },
+  password: { type: String, required: function() { return !this.googleId; } }, // Required if not using Google OAuth
+  role: { type: String, enum: ['customer', 'hospital_admin', 'doctor_admin'], default: 'customer' },
+  notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
 });
 
-export default mongoose.model("User", userSchema); // ✅ Use 'export default'
+// Hash password before saving if it exists
+UserSchema.pre('save', async function(next) {
+  if (this.isModified('password') && this.password) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
+
+// Method to compare passwords for login
+UserSchema.methods.comparePassword = async function(password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model('User', UserSchema);
