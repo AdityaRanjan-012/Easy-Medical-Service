@@ -14,19 +14,24 @@ module.exports = function(passport) {
         try {
           let user = await User.findOne({ googleId: profile.id });
           if (user) {
+            if (user.role !== 'customer') {
+              return done(null, false, { message: 'Only customers can use Google OAuth' });
+            }
             return done(null, user);
           }
 
-          // Check if the email already exists (e.g., from manual signup)
+          // Check if the email already exists
           user = await User.findOne({ email: profile.emails[0].value });
           if (user) {
-            // If the user exists with the same email, link the Google account
+            if (user.role !== 'customer') {
+              return done(null, false, { message: 'Email is registered with a different role' });
+            }
             user.googleId = profile.id;
             await user.save();
             return done(null, user);
           }
 
-          // Create a new user with Google OAuth
+          // Create new customer with Google OAuth
           user = new User({
             googleId: profile.id,
             name: profile.displayName,

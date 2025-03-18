@@ -2,7 +2,6 @@ const City = require('../models/City');
 const Hospital = require('../models/Hospital');
 const Ambulance = require('../models/Ambulance');
 
-// BFS to find shortest paths
 const findShortestPath = async (startCity) => {
   const cities = await City.find();
   const graph = cities.reduce((acc, city) => {
@@ -39,7 +38,6 @@ const findShortestPath = async (startCity) => {
   return distance;
 };
 
-// Rank hospitals
 const rankHospitals = async (distance) => {
   const hospitals = await Hospital.find();
   const rankedHospitals = [];

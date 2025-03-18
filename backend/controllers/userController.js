@@ -7,10 +7,15 @@ exports.signup = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
-    // Check if user already exists
+    // Validate role
+    if (!['customer', 'hospital_admin', 'doctor_admin'].includes(role)) {
+      return res.status(400).json({ msg: 'Invalid role' });
+    }
+
+    // Check if user already exists with the same email
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+      return res.status(400).json({ msg: 'User with this email already exists' });
     }
 
     // Create new user
@@ -18,7 +23,7 @@ exports.signup = async (req, res) => {
       name,
       email,
       password,
-      role: role || 'customer', // Default to 'customer' if role is not provided
+      role,
     });
 
     await user.save();
@@ -36,18 +41,23 @@ exports.signup = async (req, res) => {
 
 // Manual Login
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   try {
-    // Check if user exists
-    const user = await User.findOne({ email });
+    // Validate role
+    if (!['customer', 'hospital_admin', 'doctor_admin'].includes(role)) {
+      return res.status(400).json({ msg: 'Invalid role' });
+    }
+
+    // Check if user exists with the given email and role
+    const user = await User.findOne({ email, role });
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
+      return res.status(400).json({ msg: 'Invalid credentials or role' });
     }
 
     // If the user has a googleId but no password, they must use Google OAuth
     if (user.googleId && !user.password) {
-      return res.status(400).json({ msg: 'Please use Google OAuth to login' });
+      return res.status(400).json({ msg: 'Please use Google OAuth to login for this account' });
     }
 
     // Compare passwords
@@ -67,7 +77,7 @@ exports.login = async (req, res) => {
   }
 };
 
-// Get Notifications (existing method)
+// Get Notifications
 exports.getNotifications = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate('notifications');

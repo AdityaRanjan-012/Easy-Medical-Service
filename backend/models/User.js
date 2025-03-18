@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-  googleId: { type: String, required: false }, // Optional for manual signup
+  googleId: { type: String, required: false }, // Only for customers using Google OAuth
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: function() { return !this.googleId; } }, // Required if not using Google OAuth
-  role: { type: String, enum: ['customer', 'hospital_admin', 'doctor_admin'], default: 'customer' },
+  email: { type: String, required: true, unique: true }, // Unique across all users
+  password: { type: String, required: function() { return !this.googleId; } }, // Required for non-Google users
+  role: { type: String, enum: ['customer', 'hospital_admin', 'doctor_admin'], required: true },
   notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
 });
 
