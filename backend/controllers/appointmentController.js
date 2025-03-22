@@ -1,5 +1,5 @@
 const Appointment = require('../models/Appointment');
-const Doctor = require('../models/Doctor');
+const Doctor = require('../models/DoctorProfile');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 

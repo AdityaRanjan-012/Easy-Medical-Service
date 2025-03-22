@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
 const City = require('./models/City');
-const Hospital = require('./models/Hospital');
-const Ambulance = require('./models/Ambulance');
+const HospitalProfile = require('./models/HospitalProfile');
+const DoctorProfile = require('./models/DoctorProfile');
+const User = require('./models/User');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGO_URI,)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
 
+  
 const seedDB = async () => {
   await City.deleteMany({});
-  await Hospital.deleteMany({});
-  await Ambulance.deleteMany({});
+  await HospitalProfile.deleteMany({});
+  await DoctorProfile.deleteMany({});
 
   const cities = [
     { name: 'Boko', neighbors: ['Bijoynagar'] },
@@ -28,23 +28,46 @@ const seedDB = async () => {
   ];
   await City.insertMany(cities);
 
-  const hospitals = [
-    { city: 'Bijoynagar', rank: 3, emergencyNumber: '123-456-7890', ambulances: 2 },
-    { city: 'Borjhar', rank: 2, emergencyNumber: '123-456-7891', ambulances: 1 },
-    { city: 'Azara', rank: 4, emergencyNumber: '123-456-7892', ambulances: 3 },
-    { city: 'Guwahati', rank: 1, emergencyNumber: '123-456-7893', ambulances: 5 },
-  ];
-  const savedHospitals = await Hospital.insertMany(hospitals);
+  // Seed a hospital (manual signup would replace this)
+  const hospitalUser = new User({
+    name: 'Hospital Guwahati',
+    email: 'hospital@guwahati.com',
+    password: await bcrypt.hash('hospital123', 10), // Hash password
+    role: 'hospital',
+  });
+  await hospitalUser.save();
 
-  for (const hospital of savedHospitals) {
-    for (let i = 0; i < hospital.ambulances; i++) {
-      const ambulance = new Ambulance({ hospital: hospital._id });
-      await ambulance.save();
-    }
-  }
+  const hospitalProfile = new HospitalProfile({
+    userId: hospitalUser._id,
+    ambulances: 5,
+    doctors: [],
+    location: 'Guwahati Medical Center',
+  });
+  await hospitalProfile.save();
+
+  // Seed a doctor (manual signup would replace this)
+  const doctorUser = new User({
+    name: 'Dr. John',
+    email: 'john@doctor.com',
+    password: await bcrypt.hash('doctor123', 10), // Hash password
+    role: 'doctor',
+  });
+  await doctorUser.save();
+
+  const doctorProfile = new DoctorProfile({
+    userId: doctorUser._id,
+    specialist: ['Cardiology'],
+    location: 'Guwahati Medical Center',
+    hospitalId: hospitalProfile._id,
+  });
+  await doctorProfile.save();
+
+  hospitalProfile.doctors.push(doctorProfile._id);
+  await hospitalProfile.save();
 
   console.log('Database seeded');
   mongoose.connection.close();
 };
+
 
 seedDB();

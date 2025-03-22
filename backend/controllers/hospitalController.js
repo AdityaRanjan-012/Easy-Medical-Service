@@ -1,59 +1,156 @@
-const Hospital = require('../models/Hospital');
-const Doctor = require('../models/Doctor');
-const Ambulance = require('../models/Ambulance');
+const User = require('../models/User');
+const HospitalProfile = require('../models/HospitalProfile');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const asyncHandler = require('express-async-handler');
 
-exports.addDoctor = async (req, res) => {
-  const { name, specialties } = req.body;
-  const hospitalId = req.user.id;
-
-  try {
-    const hospital = await Hospital.findById(hospitalId);
-    if (!hospital) {
-      return res.status(404).json({ msg: 'Hospital not found' });
-    }
-
-    const doctor = new Doctor({
-      name,
-      hospital: hospitalId,
-      specialties,
+// Generate JWT
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
     });
-    await doctor.save();
-
-    hospital.doctors.push(doctor._id);
-    await hospital.save();
-
-    res.json({ msg: 'Doctor added successfully', doctor });
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
-  }
 };
 
-exports.updateAmbulanceCount = async (req, res) => {
-  const { count } = req.body;
-  const hospitalId = req.user.id;
+// @desc    Register hospital
+// @route   POST /api/hospitals/register
+// @access  Public
+exports.registerHospital = asyncHandler(async (req, res) => {
+    const { name, email, password, address, contact } = req.body;
 
-  try {
-    const hospital = await Hospital.findById(hospitalId);
+    if (!name || !email || !password || !address || !contact) {
+        res.status(400);
+        throw new Error('Please provide all required fields');
+    }
+    
+    // Check if hospital exists
+    const hospitalExists = await HospitalProfile.findOne({ email });
+    if (hospitalExists) {
+        res.status(400);
+        throw new Error('Hospital already registered');
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create hospital
+    const hospital = await HospitalProfile.create({
+        name,
+        email,
+        password: hashedPassword,
+        address,
+        contact,
+        role: 'hospital'
+    });
+
+    if (hospital) {
+        res.status(201).json({
+            _id: hospital._id,
+            name: hospital.name,
+            email: hospital.email,
+            token: generateToken(hospital._id),
+        });
+    } else {
+        
+        res.status(400);
+        throw new Error('Invalid hospital data');
+    }
+});
+
+// @desc    Login hospital
+// @route   POST /api/hospitals/login
+// @access  Public
+exports.loginHospital = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    // Check for hospital email
+    const hospital = await HospitalProfile.findOne({ email });
+
+    if (hospital && (await bcrypt.compare(password, hospital.password))) {
+        res.json({
+            _id: hospital._id,
+            name: hospital.name,
+            email: hospital.email,
+            token: generateToken(hospital._id),
+        });
+    } else {
+        res.status(401);
+        throw new Error('Invalid email or password');
+    }
+});
+
+// @desc    Get hospital profile
+// @route   GET /api/hospitals/profile
+// @access  Private
+exports.getHospitalProfile = asyncHandler(async (req, res) => {
+    const hospital = await HospitalProfile.findById(req.user._id)
+        .select('-password')
+        .populate('ambulances');
+
     if (!hospital) {
-      return res.status(404).json({ msg: 'Hospital not found' });
+        res.status(404);
+        throw new Error('Hospital not found');
     }
 
-    hospital.ambulances = count;
-    await hospital.save();
+    res.json(hospital);
+});
 
-    const existingAmbulances = await Ambulance.find({ hospital: hospitalId });
-    if (existingAmbulances.length < count) {
-      for (let i = existingAmbulances.length; i < count; i++) {
-        const ambulance = new Ambulance({ hospital: hospitalId });
-        await ambulance.save();
-      }
-    } else if (existingAmbulances.length > count) {
-      const toDelete = existingAmbulances.slice(count);
-      await Ambulance.deleteMany({ _id: { $in: toDelete.map(a => a._id) } });
+// @desc    Update hospital profile
+// @route   PUT /api/hospitals/profile
+// @access  Private
+exports.updateHospitalProfile = asyncHandler(async (req, res) => {
+    const hospital = await HospitalProfile.findById(req.user._id);
+
+    if (!hospital) {
+        res.status(404);
+        throw new Error('Hospital not found');
     }
 
-    res.json({ msg: 'Ambulance count updated' });
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
-  }
-};
+    const { name, address, contact } = req.body;
+
+    hospital.name = name || hospital.name;
+    hospital.address = address || hospital.address;
+    hospital.contact = contact || hospital.contact;
+
+    const updatedHospital = await hospital.save();
+
+    res.json({
+        _id: updatedHospital._id,
+        name: updatedHospital.name,
+        address: updatedHospital.address,
+        contact: updatedHospital.contact
+    });
+});
+
+// @desc    Get hospitals by city
+// @route   GET /api/hospitals/city/:city
+// @access  Public
+exports.getHospitalsByCity = asyncHandler(async (req, res) => {
+    const hospitals = await HospitalProfile.find({ 'address.city': req.params.city })
+        .select('name address contact ambulanceCount')
+        .populate({
+            path: 'ambulances',
+            match: { status: 'Available' }
+        });
+
+    res.json(hospitals);
+});
+
+// @desc    Get hospital by ID
+// @route   GET /api/hospitals/:id
+// @access  Public
+exports.getHospitalById = asyncHandler(async (req, res) => {
+    const hospital = await HospitalProfile.findById(req.params.id)
+        .select('name address contact ambulanceCount')
+        .populate({
+            path: 'ambulances',
+            match: { status: 'Available' }
+        });
+
+    if (!hospital) {
+        res.status(404);
+        throw new Error('Hospital not found');
+    }
+
+    res.json(hospital);
+});

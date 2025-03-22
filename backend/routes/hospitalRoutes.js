@@ -1,9 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const { addDoctor, updateAmbulanceCount } = require('../controllers/hospitalController');
-const auth = require('../middleware/auth');
+const { protect, hospitalAdmin } = require('../middleware/authMiddleware');
+const validateRequest = require('../middleware/validateRequest');
+const {
+    updateHospitalProfileValidation,
+    getHospitalsByCityValidation,
+    getHospitalByIdValidation
+} = require('../validations/hospitalValidations');
+const {
+    registerHospital,
+    loginHospital,
+    updateHospitalProfile,
+    getHospitalProfile,
+    getHospitalsByCity,
+    getHospitalById
+} = require('../controllers/hospitalController');
 
-router.post('/doctors', auth, addDoctor);
-router.put('/ambulances', auth, updateAmbulanceCount);
+// Auth routes
+router.post('/register', registerHospital);
+router.post('/login', loginHospital);
+
+// Protected routes
+router.route('/profile')
+    .get(protect, hospitalAdmin, getHospitalProfile)
+    .put(protect, hospitalAdmin, updateHospitalProfile);
+
+// Public routes
+router.get('/city/:city', getHospitalsByCity);
+router.get('/:id', getHospitalById);
 
 module.exports = router;
