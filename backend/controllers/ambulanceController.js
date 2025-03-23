@@ -118,29 +118,40 @@ exports.getAvailableAmbulances = asyncHandler(async (req, res) => {
 // @desc    Delete an ambulance
 // @route   DELETE /api/ambulances/:id
 // @access  Private (Hospital Admin)
+
 exports.deleteAmbulance = asyncHandler(async (req, res) => {
     const ambulance = await Ambulance.findById(req.params.id);
-    
+
     if (!ambulance) {
         res.status(404);
         throw new Error('Ambulance not found');
     }
 
-    const hospital = await Hospital.findOne({ _id : req.user._id });
-    if (!hospital || ambulance.hospital.toString() !== hospital._id.toString()) {
+    const hospital = await Hospital.findById(req.user._id);
+    if (!hospital) {
         res.status(403);
         throw new Error('Not authorized');
     }
 
-    // Update hospital ambulance counts
-    await Hospital.findByIdAndUpdate(hospital._id, {
-        $pull: { ambulances: ambulance._id },
-        $inc: { 
-            'ambulanceCount.total': -1,
-            'ambulanceCount.available': ambulance.status === 'Available' ? -1 : 0
-        }
-    });
+    if (ambulance.hospital.toString() !== hospital._id.toString()) {
+        res.status(403);
+        throw new Error('Ambulance does not belong to this hospital');
+    }
 
-    await ambulance.remove();
-    res.json({ message: 'Ambulance removed' });
+    // Update hospital ambulance list and counts
+    await Hospital.findByIdAndUpdate(
+        hospital._id,
+        {
+            $pull: { ambulances: ambulance._id },
+            $inc: { 
+                'ambulanceCount.total': -1,
+                'ambulanceCount.available': ambulance.status === 'Available' ? -1 : 0
+            }
+        }
+    );
+
+    // Delete the ambulance correctly
+    await Ambulance.findByIdAndDelete(ambulance._id);
+
+    res.json({ message: 'Ambulance removed successfully' });
 });

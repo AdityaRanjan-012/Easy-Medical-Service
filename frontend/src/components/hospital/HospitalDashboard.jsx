@@ -63,7 +63,8 @@ export default function HospitalDashboard() {
     if (!window.confirm('Are you sure you want to delete this ambulance?')) return;
 
     try {
-      await axios.delete(`/api/ambulances/${ambulanceId}`);
+      await axios.delete(`/api/ambulances/${ambulanceId}`); //DELETE /api/ambulances/:id
+      console.log(ambulanceId);
       setAmbulances(ambulances.filter(amb => amb._id !== ambulanceId));
       toast.success('Ambulance deleted successfully');
     } catch (err) {
