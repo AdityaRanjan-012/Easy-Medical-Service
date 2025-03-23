@@ -1,104 +1,116 @@
-import { Stethoscope, Ambulance, Calendar, ClipboardList, PhoneCall } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { BuildingOffice2Icon, TruckIcon, PhoneIcon } from '@heroicons/react/24/outline';
 
-const LandingPage = () => {
-  const handleGetStarted = () => {
-    window.location.href = '/login'
-  }
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <Stethoscope className="h-8 w-8 text-blue-600 mr-2" />
-            <span className="text-xl font-bold text-gray-800">Med24x7</span>
-          </div>
-          <nav>
-            <ul className="flex space-x-6">
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Home</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Services</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">About</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Contact</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
+    <div className="bg-gray-100">
       {/* Hero Section */}
-      <section className="bg-blue-600 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">Advanced Medical Management System</h1>
-            <p className="text-xl mb-8">Streamlining healthcare services for better patient care</p>
-            <button 
-              onClick={handleGetStarted}
-              className="bg-white text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-50 transition duration-300"
+      <div className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="text-center">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
+              Rapid Medical Service
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto">
+              Connecting you to emergency healthcare and ambulances when you need them most.
+            </p>
+            <div className="mt-8 flex justify-center gap-4">
+              <Link
+                to="/find-ambulance"
+                className="inline-flex items-center px-6 py-3 rounded-md bg-red-600 text-white font-semibold text-sm sm:text-base hover:bg-red-700 transition-colors"
+              >
+                <TruckIcon className="h-5 w-5 mr-2" />
+                Find an Ambulance
+              </Link>
+              <Link
+                to="/find-hospital"
+                className="inline-flex items-center px-6 py-3 rounded-md bg-white text-blue-600 font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-100 transition-colors"
+              >
+                <BuildingOffice2Icon className="h-5 w-5 mr-2" />
+                Find a Hospital
+              </Link>
+            </div>
+          </div>
+        </div>
+        {/* Optional decorative element */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gray-100 transform -skew-y-3"></div>
+      </div>
+
+      {/* Features Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-3xl font-bold text-gray-900 text-center">Why Choose RMS?</h2>
+        <p className="mt-4 text-lg text-gray-600 text-center max-w-2xl mx-auto">
+          We provide fast, reliable, and accessible emergency medical services to save lives.
+        </p>
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Feature 1 */}
+          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <TruckIcon className="h-12 w-12 text-blue-600 mx-auto" />
+            <h3 className="mt-4 text-xl font-semibold text-gray-900 text-center">
+              Instant Ambulance Booking
+            </h3>
+            <p className="mt-2 text-gray-600 text-center">
+              Locate and contact available ambulances in your area with just a few clicks.
+            </p>
+          </div>
+          {/* Feature 2 */}
+          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <BuildingOffice2Icon className="h-12 w-12 text-blue-600 mx-auto" />
+            <h3 className="mt-4 text-xl font-semibold text-gray-900 text-center">
+              Hospital Locator
+            </h3>
+            <p className="mt-2 text-gray-600 text-center">
+              Find nearby hospitals with real-time ambulance availability information.
+            </p>
+          </div>
+          {/* Feature 3 */}
+          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <PhoneIcon className="h-12 w-12 text-blue-600 mx-auto" />
+            <h3 className="mt-4 text-xl font-semibold text-gray-900 text-center">
+              24/7 Emergency Support
+            </h3>
+            <p className="mt-2 text-gray-600 text-center">
+              Our service is available round-the-clock to assist you in emergencies.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Call to Action Section */}
+      <div className="bg-blue-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold">Need Help Now?</h2>
+          <p className="mt-4 text-lg max-w-2xl mx-auto">
+            Whether it's an ambulance or hospital information, we're here to assist you immediately.
+          </p>
+          <div className="mt-8 flex justify-center gap-4">
+            <Link
+              to="/find-ambulance"
+              className="inline-flex items-center px-6 py-3 rounded-md bg-white text-blue-600 font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-100 transition-colors"
             >
-              Get Started
-            </button>
+              Get an Ambulance
+            </Link>
+            <Link
+              to="/hospital/login"
+              className="inline-flex items-center px-6 py-3 rounded-md bg-red-600 text-white font-semibold text-sm sm:text-base hover:bg-red-700 transition-colors"
+            >
+              Hospital Portal
+            </Link>
           </div>
         </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ServiceCard icon={<ClipboardList className="h-12 w-12 text-blue-600" />} title="Medical Facility Management" description="Efficient management of medical facilities to ensure smooth operations and quality care." />
-            <ServiceCard icon={<Ambulance className="h-12 w-12 text-blue-600" />} title="Ambulance Services" description="24/7 emergency ambulance services with quick response times and trained professionals." />
-            <ServiceCard icon={<Calendar className="h-12 w-12 text-blue-600" />} title="Appointment Scheduling" description="Easy and convenient appointment booking system for patients and healthcare providers." />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-blue-50 py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Improve Your Healthcare Services?</h2>
-          <p className="text-xl mb-8">Contact us today to learn more about our medical management system</p>
-          <button className="bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300">Contact Us</button>
-        </div>
-      </section>
+      </div>
 
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-between">
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h3 className="text-xl font-bold mb-2">MediCare</h3>
-              <p>Advanced medical management solutions for modern healthcare.</p>
-            </div>
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h3 className="text-xl font-bold mb-2">Quick Links</h3>
-              <ul>
-                <li><a href="#" className="hover:text-blue-400">Home</a></li>
-                <li><a href="#" className="hover:text-blue-400">Services</a></li>
-                <li><a href="#" className="hover:text-blue-400">About Us</a></li>
-                <li><a href="#" className="hover:text-blue-400">Contact</a></li>
-              </ul>
-            </div>
-            <div className="w-full md:w-1/3">
-              <h3 className="text-xl font-bold mb-2">Contact Us</h3>
-              <p className="flex items-center"><PhoneCall className="h-5 w-5 mr-2" /> +1 (555) 123-4567</p>
-              <p className="flex items-center"><ClipboardList className="h-5 w-5 mr-2" /> info@medicare.com</p>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p>&copy; 2025 Rapid Medical Service. All rights reserved.</p>
+          <div className="mt-4 flex justify-center gap-6">
+            <a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a>
+            <a href="#" className="text-gray-400 hover:text-white">Terms of Service</a>
+            <a href="#" className="text-gray-400 hover:text-white">Contact Us</a>
           </div>
         </div>
       </footer>
     </div>
   );
-};
-
-const ServiceCard = ({ icon, title, description }) => {
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-      <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2 text-center">{title}</h3>
-      <p className="text-gray-600 text-center">{description}</p>
-    </div>
-  );
-};
-
-export default LandingPage;
+}

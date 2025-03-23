@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
 import Navbar from './components/layout/Navbar';
 import FindAmbulance from './components/ambulance/FindAmbulance';
 import HospitalLogin from './components/hospital/HospitalLogin';
 import HospitalDashboard from './components/hospital/HospitalDashboard';
 import PrivateRoute from './components/auth/PrivateRoute';
+import FindHospital from './components/hospital/FindHospital';
+import LandingPage from './components/LandingPage';
 
 // Axios default config
 import axios from 'axios';
@@ -16,23 +19,26 @@ if (token) {
 
 function App() {
   return (
-    <Router>
-      <Toaster position="top-right" />
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<FindAmbulance />} />
-        <Route path="/find-ambulance" element={<FindAmbulance />} />
-        <Route path="/hospital/login" element={<HospitalLogin />} />
-        <Route
-          path="/hospital/dashboard"
-          element={
-            <PrivateRoute>
-              <HospitalDashboard />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <AuthProvider> {/* Wrap the app with AuthProvider */}
+      <Router>
+        <Toaster position="top-right" />
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/find-ambulance" element={<FindAmbulance />} />
+          <Route path="/find-hospital" element={<FindHospital />} />
+          <Route path="/hospital/login" element={<HospitalLogin />} />
+          <Route
+            path="/hospital/dashboard"
+            element={
+              <PrivateRoute>
+                <HospitalDashboard />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
