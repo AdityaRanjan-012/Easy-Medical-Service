@@ -21,7 +21,7 @@ exports.addAmbulance = asyncHandler(async (req, res) => {
         throw new Error('Ambulance with this vehicle number already exists');
     }
 
-    const hospital = await Hospital.findOne({ userId: req.user._id });
+    const hospital = await Hospital.findOne({ _id : req.user._id });
     if (!hospital) {
         res.status(404);
         throw new Error('Hospital not found');
@@ -55,7 +55,7 @@ exports.updateAmbulanceStatus = asyncHandler(async (req, res) => {
         throw new Error('Ambulance not found');
     }
 
-    const hospital = await Hospital.findOne({ userId: req.user._id });
+    const hospital = await Hospital.findOne({ _id : req.user._id });
     if (!hospital || ambulance.hospital.toString() !== hospital._id.toString()) {
         res.status(403);
         throw new Error('Not authorized');
@@ -126,7 +126,7 @@ exports.deleteAmbulance = asyncHandler(async (req, res) => {
         throw new Error('Ambulance not found');
     }
 
-    const hospital = await Hospital.findOne({ userId: req.user._id });
+    const hospital = await Hospital.findOne({ _id : req.user._id });
     if (!hospital || ambulance.hospital.toString() !== hospital._id.toString()) {
         res.status(403);
         throw new Error('Not authorized');

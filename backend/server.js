@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/errorHandler');
 // Routes
 const ambulanceRoutes = require('./routes/ambulanceRoutes');
 const hospitalRoutes = require('./routes/hospitalRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 dotenv.config();
 const app = express();
@@ -23,7 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/ambulances', ambulanceRoutes);
-
+app.use('/api/users', userRoutes);
 // 404 handler
 app.use((req, res) => {
     res.status(404).json({
