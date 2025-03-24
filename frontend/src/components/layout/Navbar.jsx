@@ -7,7 +7,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 const publicNavigation = [
   { name: 'Find Ambulance', href: '/find-ambulance' },
-  { name: 'Hospitals', href: '/find-hospital' },
+  { name: 'Find Hospitals', href: '/find-hospital' },
 ];
 
 function classNames(...classes) {
