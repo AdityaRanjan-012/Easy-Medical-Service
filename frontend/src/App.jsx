@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
@@ -8,13 +9,14 @@ import HospitalDashboard from './components/hospital/HospitalDashboard';
 import PrivateRoute from './components/auth/PrivateRoute';
 import FindHospital from './components/hospital/FindHospital';
 import LandingPage from './components/LandingPage';
-// src/App.jsx or wherever your routes are defined
 import CustomerLogin from './components/Customer/Login';
 import CustomerProfile from './components/Customer/Dashboard';
-
-// Axios default config
+import CustomerSignup from './components/Customer/Signup';
+import BookAmbulance from './components/ambulance/BookAmbulance';
+import BookingComponent from './components/Customer/MyBooking';
 import axios from 'axios';
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+//import.meta.env.VITE_API_URL ||
+axios.defaults.baseURL = 'http://localhost:5000';
 const token = localStorage.getItem('token');
 if (token) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -32,7 +34,10 @@ function App() {
           <Route path="/find-hospital" element={<FindHospital />} />
           <Route path="/hospital/login" element={<HospitalLogin />} />
           <Route path="/customer/login" element={<CustomerLogin />} />
+          <Route path="/customer/signup" element={<CustomerSignup />} />
+          <Route path="/book/ambulance" element={<BookAmbulance />} />
           <Route path="/customer/profile" element={<CustomerProfile />} />
+          <Route path="/customer/bookings" element={<BookingComponent />} />
           
           <Route
             path="/hospital/dashboard"

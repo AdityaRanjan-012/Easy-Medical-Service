@@ -17,7 +17,7 @@ exports.bookAmbulance = asyncHandler(async (req, res) => {
         });
     }
 console.log("im above " + ambulance.status);
-    if (ambulance.status !== 'Available') {
+    if (ambulance.status !== 'available') {
         return res.status(400).json({
             status: 'error',
             message: 'Ambulance is not available'
@@ -34,7 +34,7 @@ console.log("im above " + ambulance.status);
         status: 'pending'
     });
     // Update ambulance status
-    ambulance.status = 'Booked';
+    ambulance.status = 'booked';
     await ambulance.save();
     res.status(201).json({
         status: 'success',
@@ -60,38 +60,38 @@ exports.getMyBookings = asyncHandler(async (req, res) => {
 // @desc    Cancel ambulance booking
 // @route   PUT /api/ambulance-bookings/:id/cancel
 // @access  Private
-// exports.cancelBooking = asyncHandler(async (req, res) => {
-//     const booking = await AmbulanceBooking.findById(req.params.id);
+exports.cancelBooking = asyncHandler(async (req, res) => {
+    const booking = await AmbulanceBooking.findById(req.params.id);
 
-//     if (!booking) {
-//         return res.status(404).json({
-//             status: 'error',
-//             message: 'Booking not found'
-//         });
-//     }
+    if (!booking) {
+        return res.status(404).json({
+            status: 'error',
+            message: 'Booking not found'
+        });
+    }
 
-//     // Check if user owns the booking
-//     if (booking.user.toString() !== req.user._id.toString()) {
-//         return res.status(403).json({
-//             status: 'error',
-//             message: 'Not authorized to cancel this booking'
-//         });
-//     }
+    // Check if user owns the booking
+    if (booking.user.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+            status: 'error',
+            message: 'Not authorized to cancel this booking'
+        });
+    }
 
-//     // Update ambulance status back to available
-//     const ambulance = await Ambulance.findById(booking.ambulance);
-//     ambulance.status = 'available';
-//     await ambulance.save();
+    // Update ambulance status back to available
+    const ambulance = await Ambulance.findById(booking.ambulance);
+    ambulance.status = 'available';
+    await ambulance.save();
 
-//     // Update booking status
-//     booking.status = 'cancelled';
-//     await booking.save();
+    // Update booking status
+    booking.status = 'cancelled';
+    await booking.save();
 
-//     res.status(200).json({
-//         status: 'success',
-//         data: booking
-//     });
-// });
+    res.status(200).json({
+        status: 'success',
+        data: booking
+    });
+});
 
 // @desc    Update booking status (for ambulance drivers/hospital staff)
 // @route   PUT /api/ambulance-bookings/:id/status

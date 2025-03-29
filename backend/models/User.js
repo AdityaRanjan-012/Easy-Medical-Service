@@ -7,6 +7,8 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: function() { return !this.googleId; } }, // Required for non-Google users
   role: { type: String, enum: ['customer', 'doctor', 'hospital'], required: true },
+  phone: { type: String, required: false },
+  address: { type: String, required: false },
   notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
 });
 

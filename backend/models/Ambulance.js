@@ -6,8 +6,8 @@ const AmbulanceSchema = new mongoose.Schema({
   contactNumber: { type: String, required: true },
   status: {
     type: String,
-    enum: ['Available', 'Booked'],
-    default: 'Available'
+    enum: ['available', 'booked'],
+    default: 'available'
   }
 }, {
   timestamps: true

@@ -1,9 +1,14 @@
-import { useState } from 'react';
+// src/components/FindAmbulance.jsx
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function FindAmbulance() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [city, setCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [hospitals, setHospitals] = useState([]);
@@ -32,6 +37,23 @@ export default function FindAmbulance() {
     }
   };
 
+  const handleBookClick = (ambulance) => {
+    if (!user) {
+      toast.error('Please login to book an ambulance');
+      
+      // Store the intended path in localStorage
+      localStorage.setItem('redirectAfterLogin', JSON.stringify({ path: '/book/ambulance', state: { ambulance } }));
+  
+      // Navigate to login page
+      navigate('/customer/login');
+      return;
+    }
+  
+    // If user is logged in, proceed with navigation
+    navigate('/book/ambulance', { state: { ambulance } });
+  };
+  
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -47,9 +69,7 @@ export default function FindAmbulance() {
         <div className="mt-8">
           <form onSubmit={handleSearch} className="flex justify-center gap-x-4">
             <div className="w-full max-w-lg">
-              <label htmlFor="city" className="sr-only">
-                City
-              </label>
+              <label htmlFor="city" className="sr-only">City</label>
               <input
                 type="text"
                 name="city"
@@ -98,13 +118,21 @@ export default function FindAmbulance() {
                           key={ambulance._id}
                           className="flex items-center justify-between rounded-md bg-gray-50 px-4 py-2 text-sm"
                         >
-                          <span className="font-medium">{ambulance.vehicleNumber}</span>
-                          <a
-                            href={`tel:${ambulance.contactNumber}`}
-                            className="text-red-600 hover:text-red-500"
+                          <div className="flex items-center gap-4">
+                            <span className="font-medium">{ambulance.vehicleNumber}</span>
+                            <a
+                              href={`tel:${ambulance.contactNumber}`}
+                              className="text-red-600 hover:text-red-500"
+                            >
+                              {ambulance.contactNumber}
+                            </a>
+                          </div>
+                          <button
+                            onClick={() => handleBookClick(ambulance)}
+                            className="px-3 py-1 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-500"
                           >
-                            {ambulance.contactNumber}
-                          </a>
+                            Book
+                          </button>
                         </li>
                       ))}
                     </ul>
@@ -115,12 +143,8 @@ export default function FindAmbulance() {
           </div>
         )}
 
-        {error && (
-          <div className="mt-8 text-center text-red-600">
-            {error}
-          </div>
-        )}
+        {error && <div className="mt-8 text-center text-red-600">{error}</div>}
       </div>
     </div>
   );
-} 
+}

@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+import React from 'react';
 import { Fragment, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -12,6 +12,7 @@ const publicNavigation = [
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
+  
 }
 
 export default function Navbar() {
@@ -52,7 +53,7 @@ export default function Navbar() {
                   <Menu as="div" className="relative">
                     <Menu.Button className="flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50">
                       <UserCircleIcon className="h-5 w-5 mr-1 text-gray-600" />
-                      {user.role === 'hospital' ? user.data.name : user.data.username}
+                      {user.role === 'hospital' ? user.data.name : user.data.name}
                     </Menu.Button>
                     <Transition
                       as={Fragment}

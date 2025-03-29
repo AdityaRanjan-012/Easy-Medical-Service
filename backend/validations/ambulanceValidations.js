@@ -19,7 +19,7 @@ exports.updateStatusValidation = [
     body('status')
         .trim()
         .notEmpty().withMessage('Status is required')
-        .isIn(['Available', 'Booked']).withMessage('Status must be either Available or Booked')
+        .isIn(['available', 'booked']).withMessage('Status must be either Available or Booked')
 ];
 
 exports.getHospitalAmbulancesValidation = [

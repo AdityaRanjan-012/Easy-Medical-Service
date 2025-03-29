@@ -130,7 +130,7 @@ exports.getHospitalsByCity = asyncHandler(async (req, res) => {
         .select('name address contact ambulanceCount')
         .populate({
             path: 'ambulances',
-            match: { status: 'Available' }
+            match: { status: 'available' }
         });
 
     res.json(hospitals);
@@ -144,7 +144,7 @@ exports.getHospitalById = asyncHandler(async (req, res) => {
         .select('name address contact ambulanceCount')
         .populate({
             path: 'ambulances',
-            match: { status: 'Available' }
+            match: { status: 'available' }
         });
 
     if (!hospital) {

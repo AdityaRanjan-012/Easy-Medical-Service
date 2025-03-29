@@ -31,7 +31,7 @@ exports.addAmbulance = asyncHandler(async (req, res) => {
         hospital: hospital._id,
         vehicleNumber,
         contactNumber,
-        status: 'Available'
+        status: 'available'
     });
 
     // Update hospital ambulance counts
@@ -66,8 +66,8 @@ exports.updateAmbulanceStatus = asyncHandler(async (req, res) => {
     await ambulance.save();
 
     // Update hospital's available ambulance count
-    const availableChange = (oldStatus === 'Available' && status === 'Booked') ? -1 :
-                          (oldStatus === 'Booked' && status === 'Available') ? 1 : 0;
+    const availableChange = (oldStatus === 'available' && status === 'booked') ? -1 :
+                          (oldStatus === 'booked' && status === 'available') ? 1 : 0;
     
     if (availableChange !== 0) {
         await Hospital.findByIdAndUpdate(hospital._id, {
@@ -102,7 +102,7 @@ exports.getAvailableAmbulances = asyncHandler(async (req, res) => {
     const hospitals = await Hospital.find({ 'address.city': city })
         .populate({
             path: 'ambulances',
-            match: { status: 'Available' }
+            match: { status: 'available' }
         });
 
     const availableAmbulances = hospitals.map(hospital => ({
@@ -145,7 +145,7 @@ exports.deleteAmbulance = asyncHandler(async (req, res) => {
             $pull: { ambulances: ambulance._id },
             $inc: { 
                 'ambulanceCount.total': -1,
-                'ambulanceCount.available': ambulance.status === 'Available' ? -1 : 0
+                'ambulanceCount.available': ambulance.status === 'available' ? -1 : 0
             }
         }
     );

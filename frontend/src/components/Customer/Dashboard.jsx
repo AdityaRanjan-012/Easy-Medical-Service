@@ -1,4 +1,5 @@
 // src/components/CustomerProfile.jsx
+import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -101,7 +102,7 @@ export default function CustomerProfile() {
                         <EnvelopeIcon className="h-5 w-5 mr-2 text-blue-500" />
                         Email
                       </h3>
-                      <p className="mt-1 text-gray-600">{profileData.email}</p>
+                      <p className="mt-1 text-gray-600">{profileData?.email || 'Not available'}</p>
                     </div>
                   </div>
                   <div className="space-y-4">
