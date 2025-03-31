@@ -1,13 +1,13 @@
 const AmbulanceBooking = require('../models/AmbulanceBooking');
 const Ambulance = require('../models/Ambulance');
+const HospitalProfile = require('../models/HospitalProfile');
 const asyncHandler = require('express-async-handler');
+
 // @desc    Book an ambulance
 // @route   POST /api/ambulance-bookings/book
 // @access  Private
 exports.bookAmbulance = asyncHandler(async (req, res) => {
-    const { ambulanceId, pickupLocation, patientAge, emergencyType } = req.body;
-    console.log("User Object: ", req.user);  // Debugging
-
+    const { ambulanceId, pickupLocation,  patientAge, emergencyType } = req.body;
     // Check if ambulance exists and is available
     const ambulance = await Ambulance.findById(ambulanceId);
     if (!ambulance) {
@@ -16,7 +16,6 @@ exports.bookAmbulance = asyncHandler(async (req, res) => {
             message: 'Ambulance not found'
         });
     }
-console.log("im above " + ambulance.status);
     if (ambulance.status !== 'available') {
         return res.status(400).json({
             status: 'error',
@@ -24,9 +23,10 @@ console.log("im above " + ambulance.status);
         });
     }
 
-    // Create booking
+    // Create booking with hospital reference
     const booking = await AmbulanceBooking.create({
         ambulance: ambulanceId,
+        hospital: ambulance.hospital, // Add hospital reference from ambulance
         user: req.user._id,
         pickupLocation,
         patientAge,
@@ -34,8 +34,8 @@ console.log("im above " + ambulance.status);
         status: 'pending'
     });
     // Update ambulance status
-    ambulance.status = 'booked';
-    await ambulance.save();
+    // ambulance.status = 'booked';
+    // await ambulance.save();
     res.status(201).json({
         status: 'success',
         data: booking
@@ -48,6 +48,26 @@ console.log("im above " + ambulance.status);
 exports.getMyBookings = asyncHandler(async (req, res) => {
     const bookings = await AmbulanceBooking.find({ user: req.user._id })
         .populate('ambulance')
+        .populate('hospital')
+        .sort('-createdAt');
+
+    res.status(200).json({
+        status: 'success',
+        count: bookings.length,
+        data: bookings
+    });
+});
+
+// @desc    Get all bookings for a hospital (Hospital Admin)
+// @route   GET /api/ambulance-bookings/hospital/:hospitalId
+// @access  Private (Hospital Admin)
+exports.getHospitalBookings = asyncHandler(async (req, res) => {
+    const hospitalId = req.user._id.toString();
+    // console.log(req.user._id.toString());
+
+    const bookings = await AmbulanceBooking.find({ hospital: hospitalId })
+        .populate('ambulance')
+        .populate('user', 'name email phone')
         .sort('-createdAt');
 
     res.status(200).json({
@@ -70,8 +90,9 @@ exports.cancelBooking = asyncHandler(async (req, res) => {
         });
     }
 
-    // Check if user owns the booking
-    if (booking.user.toString() !== req.user._id.toString()) {
+    // Check if user owns the booking or is hospital admin
+    if (booking.user.toString() !== req.user._id.toString() && 
+        booking.hospital.toString() !== req.user.hospital.toString()) {
         return res.status(403).json({
             status: 'error',
             message: 'Not authorized to cancel this booking'
@@ -79,9 +100,9 @@ exports.cancelBooking = asyncHandler(async (req, res) => {
     }
 
     // Update ambulance status back to available
-    const ambulance = await Ambulance.findById(booking.ambulance);
-    ambulance.status = 'available';
-    await ambulance.save();
+    // const ambulance = await Ambulance.findById(booking.ambulance);
+    // ambulance.status = 'available';
+    // await ambulance.save();
 
     // Update booking status
     booking.status = 'cancelled';
@@ -99,7 +120,8 @@ exports.cancelBooking = asyncHandler(async (req, res) => {
 exports.updateBookingStatus = asyncHandler(async (req, res) => {
     const { status } = req.body;
     const booking = await AmbulanceBooking.findById(req.params.id);
-
+    const hospital = await HospitalProfile.findById(req.user._id);
+    // console.log(hospital.ambulanceCount.available);
     if (!booking) {
         return res.status(404).json({
             status: 'error',
@@ -107,15 +129,29 @@ exports.updateBookingStatus = asyncHandler(async (req, res) => {
         });
     }
 
+    // Check if user is hospital admin for this booking's hospital
+    if (booking.hospital.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+            status: 'error',
+            message: 'Not authorized to update this booking'
+        });
+    }
     booking.status = status;
     await booking.save();
 
+    const ambulance = await Ambulance.findById(booking.ambulance);
+
     // If booking is completed, update ambulance status
-    if (status === 'completed') {
-        const ambulance = await Ambulance.findById(booking.ambulance);
+    if (status === 'completed' || status === 'cancelled') {
         ambulance.status = 'available';
-        await ambulance.save();
+        hospital.ambulanceCount.available += 1;
     }
+    else if(ambulance.status === 'available' && (status !== 'completed' || status === 'cancelled')) {
+        ambulance.status = 'booked';
+        hospital.ambulanceCount.available -= 1;
+    }
+    await ambulance.save();
+    await hospital.save();
 
     res.status(200).json({
         status: 'success',

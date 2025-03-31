@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const ambulanceBookingSchema = new mongoose.Schema({
+    hospital: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'HospitalProfile', 
+        required: true
+    },
     ambulance: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ambulance',
@@ -37,4 +42,4 @@ const ambulanceBookingSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('AmbulanceBooking', ambulanceBookingSchema); 
+module.exports = mongoose.model('AmbulanceBooking', ambulanceBookingSchema);

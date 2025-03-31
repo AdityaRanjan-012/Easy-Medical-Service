@@ -126,6 +126,7 @@ const BookAmbulance = () => {
                 >
                   <option value="emergency">Emergency</option>
                   <option value="non-emergency">Non-Emergency</option>
+                  <option value="transfer">Transfer</option>
                 </select>
               </div>
               <div className="flex justify-end gap-2">

@@ -1,20 +1,16 @@
-// src/components/HospitalDashboard.jsx
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { PlusIcon, XMarkIcon, BuildingOffice2Icon, PhoneIcon, TruckIcon } from '@heroicons/react/24/outline';
+import { BuildingOffice2Icon, PhoneIcon, TruckIcon } from '@heroicons/react/24/outline';
 import { AuthContext } from '../../context/AuthContext';
+import ViewAmbulanceBookings from './ViewAmbulanceBookings';
+import AmbulanceManagement from './AmbulanceManagement'; // Import the new component
 
 export default function HospitalDashboard() {
   const [hospitalData, setHospitalData] = useState(null);
   const [ambulances, setAmbulances] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newAmbulance, setNewAmbulance] = useState({
-    vehicleNumber: '',
-    contactNumber: '',
-  });
   const { login } = useContext(AuthContext);
 
   useEffect(() => {
@@ -26,53 +22,14 @@ export default function HospitalDashboard() {
       setLoading(true);
       const response = await axios.get('/api/hospitals/profile');
       setHospitalData(response.data);
+      console.log(response.data);
       setAmbulances(response.data.ambulances);
-      login({ name: response.data.name }, 'hospital'); // Set role as 'hospital'
+      login({ name: response.data.name }, 'hospital');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch hospital data');
       toast.error(err.response?.data?.message || 'Failed to fetch hospital data');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleAddAmbulance = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/api/ambulances', newAmbulance);
-      setAmbulances([...ambulances, response.data]);
-      setShowAddForm(false);
-      setNewAmbulance({ vehicleNumber: '', contactNumber: '' });
-      toast.success('Ambulance added successfully');
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.errors?.[0]?.message ||
-        err.response?.data?.message ||
-        'Failed to add ambulance';
-      toast.error(errorMessage);
-    }
-  };
-
-  const handleStatusChange = async (ambulanceId, newStatus) => {
-    try {
-      await axios.put(`/api/ambulances/${ambulanceId}/status`, { status: newStatus });
-      setAmbulances(ambulances.map((amb) =>
-        amb._id === ambulanceId ? { ...amb, status: newStatus } : amb
-      ));
-      toast.success('Ambulance status updated');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to update status');
-    }
-  };
-
-  const handleDelete = async (ambulanceId) => {
-    if (!window.confirm('Are you sure you want to delete this ambulance?')) return;
-    try {
-      await axios.delete(`/api/ambulances/${ambulanceId}`);
-      setAmbulances(ambulances.filter((amb) => amb._id !== ambulanceId));
-      toast.success('Ambulance deleted successfully');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete ambulance');
     }
   };
 
@@ -139,115 +96,15 @@ export default function HospitalDashboard() {
           </div>
         </div>
 
-        {/* Ambulance Management Section */}
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900">Ambulance Management</h2>
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Add Ambulance
-            </button>
-          </div>
-
-          {/* Add Ambulance Form */}
-          {showAddForm && (
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">Add New Ambulance</h3>
-                <button
-                  onClick={() => setShowAddForm(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <XMarkIcon className="h-6 w-6" />
-                </button>
-              </div>
-              <form onSubmit={handleAddAmbulance} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Vehicle Number</label>
-                  <input
-                    type="text"
-                    value={newAmbulance.vehicleNumber}
-                    onChange={(e) => setNewAmbulance({ ...newAmbulance, vehicleNumber: e.target.value })}
-                    className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="e.g., MH02AB1234"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Contact Number</label>
-                  <input
-                    type="tel"
-                    value={newAmbulance.contactNumber}
-                    onChange={(e) => setNewAmbulance({ ...newAmbulance, contactNumber: e.target.value })}
-                    className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="10-digit mobile number"
-                    required
-                  />
-                </div>
-                <div className="md:col-span-2 flex justify-end">
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    Add Ambulance
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          {/* Ambulance Table */}
-          <div className="p-6">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Vehicle Number</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Contact Number</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {ambulances.map((ambulance) => (
-                    <tr key={ambulance._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ambulance.vehicleNumber}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ambulance.contactNumber}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <select
-                          value={ambulance.status}
-                          onChange={(e) => handleStatusChange(ambulance._id, e.target.value)}
-                          className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                        >
-                          <option value="Available">Available</option>
-                          <option value="Booked">Booked</option>
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
-                        <button
-                          onClick={() => handleDelete(ambulance._id)}
-                          className="text-red-600 hover:text-red-800 font-medium"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {ambulances.length === 0 && (
-                    <tr>
-                      <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
-                        No ambulances found. Click "Add Ambulance" to get started.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        {/* View Ambulance Bookings Section */}
+        <div className="mb-8">
+          <ViewAmbulanceBookings />
         </div>
+        {/* Ambulance Management Section */}
+        <div className="mb-8">
+          <AmbulanceManagement ambulances={ambulances} setAmbulances={setAmbulances} />
+        </div>
+
       </div>
     </div>
   );

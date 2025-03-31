@@ -1,5 +1,4 @@
-import React from 'react';
-import { Fragment, useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
@@ -12,7 +11,6 @@ const publicNavigation = [
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
-  
 }
 
 export default function Navbar() {
@@ -51,9 +49,12 @@ export default function Navbar() {
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 {user ? (
                   <Menu as="div" className="relative">
-                    <Menu.Button className="flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50">
+                    <Menu.Button
+                      className="flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+                      onClick={() => console.log('Menu button clicked')} // Debug log
+                    >
                       <UserCircleIcon className="h-5 w-5 mr-1 text-gray-600" />
-                      {user.role === 'hospital' ? user.data.name : user.data.name}
+                      {user.role === 'hospital' ? user.data?.name : user.data?.name}
                     </Menu.Button>
                     <Transition
                       as={Fragment}
@@ -64,7 +65,7 @@ export default function Navbar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+                      <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                         {user.role === 'hospital' ? (
                           <>
                             <Menu.Item>
@@ -178,7 +179,7 @@ export default function Navbar() {
                 {user ? (
                   <>
                     <div className="px-4 py-2 text-base font-medium text-gray-900">
-                      {user.role === 'hospital' ? user.data.name : user.data.username}
+                      {user.role === 'hospital' ? user.data?.name : user.data?.name}
                     </div>
                     {user.role === 'hospital' ? (
                       <Link
@@ -214,16 +215,12 @@ export default function Navbar() {
                   <>
                     <a
                       href="/customer/login"
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="block px-4 py-2 text-base font-medium text-blue-600 hover:bg-gray-100"
                     >
                       Customer Login
                     </a>
                     <a
                       href="/hospital/login"
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="block px-4 py-2 text-base font-medium text-red-600 hover:bg-gray-100"
                     >
                       Hospital Login
