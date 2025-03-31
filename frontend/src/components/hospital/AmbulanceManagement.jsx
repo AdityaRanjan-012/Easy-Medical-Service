@@ -54,7 +54,7 @@ export default function AmbulanceManagement({ ambulances, setAmbulances }) {
         </h2>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center px-5 py-2.5 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors shadow-md font-medium"
+          className="flex items-center px-5 py-2.5 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors shadow-md font-medium"
         >
           <PlusIcon className="h-5 w-5 mr-2" />
           Add Ambulance
@@ -80,7 +80,7 @@ export default function AmbulanceManagement({ ambulances, setAmbulances }) {
                 type="text"
                 value={newAmbulance.vehicleNumber}
                 onChange={(e) => setNewAmbulance({ ...newAmbulance, vehicleNumber: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 shadow-sm py-3 px-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full rounded-xl border border-gray-300 shadow-sm py-3 px-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 placeholder="e.g., MH02AB1234"
                 required
               />
@@ -91,7 +91,7 @@ export default function AmbulanceManagement({ ambulances, setAmbulances }) {
                 type="tel"
                 value={newAmbulance.contactNumber}
                 onChange={(e) => setNewAmbulance({ ...newAmbulance, contactNumber: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 shadow-sm py-3 px-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full rounded-xl border border-gray-300 shadow-sm py-3 px-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 placeholder="10-digit mobile number"
                 required
               />
@@ -100,13 +100,13 @@ export default function AmbulanceManagement({ ambulances, setAmbulances }) {
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors mr-3 font-medium"
+                className="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-colors mr-3 font-medium"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md font-medium"
+                className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-md font-medium"
               >
                 Add Ambulance
               </button>
@@ -180,7 +180,7 @@ export default function AmbulanceManagement({ ambulances, setAmbulances }) {
                       <p className="text-gray-500 text-lg">No ambulances found</p>
                       <button
                         onClick={() => setShowAddForm(true)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mt-2 text-sm font-medium"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors mt-2 text-sm font-medium"
                       >
                         Add Your First Ambulance
                       </button>

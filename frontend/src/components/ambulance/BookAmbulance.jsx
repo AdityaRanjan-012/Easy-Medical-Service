@@ -66,20 +66,20 @@ const BookAmbulance = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="mx-auto max-w-md px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-lg px-4 sm:px-6 lg:px-8 bg-white rounded-xl shadow-lg p-6">
         {!user ? (
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900">Login Required</h2>
             <p className="mt-2 text-gray-600">Please login to book an ambulance.</p>
             <Link
               to="/customer/login"
-              className="mt-4 inline-block rounded-md bg-red-600 px-6 py-3 text-sm font-semibold text-white hover:bg-red-500"
+              className="mt-4 inline-block rounded-xl bg-red-600 px-6 py-3 text-sm font-semibold text-white hover:bg-red-500"
             >
               Customer Login
             </Link>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Book Ambulance</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -88,7 +88,7 @@ const BookAmbulance = () => {
                   type="text"
                   value={ambulance.vehicleNumber}
                   disabled
-                  className="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 p-2"
+                  className="mt-1 block w-full rounded-xl border-gray-300 bg-gray-100 p-2"
                 />
               </div>
               <div>
@@ -99,7 +99,7 @@ const BookAmbulance = () => {
                   value={formData.pickupLocation}
                   onChange={handleChange}
                   required
-                  className="mt-1 block w-full rounded-md border-gray-300 p-2 focus:ring-red-500 focus:border-red-500"
+                  className="mt-1 block w-full rounded-xl border-gray-300 p-2 focus:ring-red-500 focus:border-red-500"
                   placeholder="Enter pickup location"
                 />
               </div>
@@ -112,7 +112,7 @@ const BookAmbulance = () => {
                   onChange={handleChange}
                   required
                   min="1"
-                  className="mt-1 block w-full rounded-md border-gray-300 p-2 focus:ring-red-500 focus:border-red-500"
+                  className="mt-1 block w-full rounded-xl border-gray-300 p-2 focus:ring-red-500 focus:border-red-500"
                   placeholder="Enter patient age"
                 />
               </div>
@@ -122,7 +122,7 @@ const BookAmbulance = () => {
                   name="emergencyType"
                   value={formData.emergencyType}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 p-2 focus:ring-red-500 focus:border-red-500"
+                  className="mt-1 block w-full rounded-xl border-gray-300 p-2 focus:ring-red-500 focus:border-red-500"
                 >
                   <option value="emergency">Emergency</option>
                   <option value="non-emergency">Non-Emergency</option>
@@ -132,14 +132,14 @@ const BookAmbulance = () => {
               <div className="flex justify-end gap-2">
                 <Link
                   to="/find-ambulance"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200"
                 >
                   Cancel
                 </Link>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-500 disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-500 disabled:opacity-50"
                 >
                   {loading ? 'Booking...' : 'Book Now'}
                 </button>

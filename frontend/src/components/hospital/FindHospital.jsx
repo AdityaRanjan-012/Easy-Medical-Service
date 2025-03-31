@@ -65,14 +65,14 @@ export default function FindNearbyHospitals() {
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="flex-1 rounded-md border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+              className="flex-1 rounded-xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
               placeholder="Enter city name (e.g., Guwahati)"
             />
             <button
               type="button"
               onClick={handleClick}
               disabled={loading}
-              className="rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
+              className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
             >
               {loading ? 'Searching...' : 'Find Hospitals'}
             </button>
@@ -89,7 +89,7 @@ export default function FindNearbyHospitals() {
               {hospitals.map((hospital) => (
                 <div
                   key={hospital._id}
-                  className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                  className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow"
                 >
                   <div className="flex items-center mb-4">
                     <BuildingOffice2Icon className="h-6 w-6 text-blue-600 mr-2" />
@@ -136,7 +136,7 @@ export default function FindNearbyHospitals() {
                         {hospital.ambulances.map((ambulance) => (
                           <div
                             key={ambulance._id}
-                            className="flex items-center justify-between bg-gray-50 p-2 rounded-md"
+                            className="flex items-center justify-between bg-gray-50 p-2 rounded-xl"
                           >
                             <div>
                               <p className="font-medium text-gray-900">{ambulance.vehicleNumber}</p>
@@ -161,14 +161,14 @@ export default function FindNearbyHospitals() {
 
         {/* Error */}
         {error && (
-          <div className="mt-8 text-center text-red-600 bg-red-50 p-4 rounded-md max-w-2xl mx-auto">
+          <div className="mt-8 text-center text-red-600 bg-red-50 p-4 rounded-xl max-w-2xl mx-auto">
             {error}
           </div>
         )}
 
         {/* No Results - Only show after search */}
         {hospitals.length === 0 && !loading && !error && searched && (
-          <div className="mt-8 text-center text-gray-600 bg-gray-50 p-4 rounded-md max-w-2xl mx-auto">
+          <div className="mt-8 text-center text-gray-600 bg-gray-50 p-4 rounded-xl max-w-2xl mx-auto">
             No hospitals found in {city.charAt(0).toUpperCase() + city.slice(1)}. Try another city.
           </div>
         )}

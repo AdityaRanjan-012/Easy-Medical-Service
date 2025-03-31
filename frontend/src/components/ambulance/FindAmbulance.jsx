@@ -76,14 +76,14 @@ export default function FindAmbulance() {
                 id="city"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="block w-full rounded-md border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm"
+                className="block w-full rounded-xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm"
                 placeholder="Enter your city name"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="flex-none rounded-md bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 disabled:opacity-50"
+              className="flex-none rounded-xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 disabled:opacity-50"
             >
               {loading ? 'Searching...' : 'Search'}
             </button>
@@ -97,7 +97,7 @@ export default function FindAmbulance() {
               {hospitals.map((hospital) => (
                 <div
                   key={hospital._id}
-                  className="rounded-lg bg-white shadow-sm ring-1 ring-gray-900/5 p-6"
+                  className="rounded-xl bg-white shadow-sm ring-1 ring-gray-900/5 p-6"
                 >
                   <h3 className="text-lg font-semibold text-gray-900">{hospital.hospitalName}</h3>
                   <div className="mt-2 text-sm text-gray-500">
@@ -116,7 +116,7 @@ export default function FindAmbulance() {
                       {hospital.availableAmbulances.map((ambulance) => (
                         <li
                           key={ambulance._id}
-                          className="flex items-center justify-between rounded-md bg-gray-50 px-4 py-2 text-sm"
+                          className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-2 text-sm"
                         >
                           <div className="flex items-center gap-4">
                             <span className="font-medium">{ambulance.vehicleNumber}</span>
@@ -129,7 +129,7 @@ export default function FindAmbulance() {
                           </div>
                           <button
                             onClick={() => handleBookClick(ambulance)}
-                            className="px-3 py-1 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-500"
+                            className="px-3 py-1 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-500"
                           >
                             Book
                           </button>

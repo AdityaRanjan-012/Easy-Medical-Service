@@ -70,13 +70,10 @@ function Signup() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-      <div className="max-w-md w-full space-y-8 bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+      <div className="max-w-lg w-full space-y-8 bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
         {/* Logo/Brand Section */}
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center">
-            <span className="text-2xl text-white font-bold">H</span>
-          </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Create your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
@@ -86,7 +83,7 @@ function Signup() {
 
         {/* Success Alert */}
         {success && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-md">
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-xl">
             <div className="flex">
               <div className="flex-shrink-0">
                 <span className="text-green-500 text-xl">✓</span>
@@ -100,7 +97,7 @@ function Signup() {
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl">
             <div className="flex">
               <div className="flex-shrink-0">
                 <span className="text-red-500 text-xl">⚠</span>
@@ -336,7 +333,7 @@ function Signup() {
 
             <div className="text-center">
               <a
-                href="/login"
+                href="/hospital/login"
                 className="text-sm text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
               >
                 Already have an account? Sign in

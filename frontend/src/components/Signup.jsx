@@ -86,7 +86,7 @@ function Signup() {
 
         {/* Success Alert */}
         {success && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-md">
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-xl">
             <div className="flex">
               <div className="flex-shrink-0">
                 <span className="text-green-500 text-xl">✓</span>
@@ -100,7 +100,7 @@ function Signup() {
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl">
             <div className="flex">
               <div className="flex-shrink-0">
                 <span className="text-red-500 text-xl">⚠</span>

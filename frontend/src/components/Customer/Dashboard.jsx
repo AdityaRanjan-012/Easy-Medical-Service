@@ -77,7 +77,7 @@ export default function CustomerProfile() {
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Profile Card */}
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+        <div className="bg-white shadow-xl rounded-xl overflow-hidden">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-4">
             <h1 className="text-2xl font-bold text-white flex items-center">
               <UserCircleIcon className="h-6 w-6 mr-2" />
@@ -129,7 +129,7 @@ export default function CustomerProfile() {
                 <div className="mt-6 flex justify-end">
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
                   >
                     Edit Profile
                   </button>
@@ -145,7 +145,7 @@ export default function CustomerProfile() {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       required
                     />
                   </div>
@@ -156,7 +156,7 @@ export default function CustomerProfile() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       required
                     />
                   </div>
@@ -167,7 +167,7 @@ export default function CustomerProfile() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Enter phone number"
                     />
                   </div>
@@ -178,7 +178,7 @@ export default function CustomerProfile() {
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Enter address"
                     />
                   </div>
@@ -187,13 +187,13 @@ export default function CustomerProfile() {
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
                   >
                     Save Changes
                   </button>
@@ -204,18 +204,18 @@ export default function CustomerProfile() {
         </div>
 
         {/* Quick Links */}
-        <div className="mt-8 bg-white shadow-xl rounded-lg p-6">
+        <div className="mt-8 bg-white shadow-xl rounded-xl p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <a
               href="/find-ambulance"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-center transition-colors"
             >
               Find Ambulance
             </a>
             <a
               href="/customer/bookings"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-center transition-colors"
             >
               View Bookings
             </a>

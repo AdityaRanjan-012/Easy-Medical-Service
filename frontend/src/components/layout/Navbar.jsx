@@ -50,8 +50,7 @@ export default function Navbar() {
                 {user ? (
                   <Menu as="div" className="relative">
                     <Menu.Button
-                      className="flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-                      onClick={() => console.log('Menu button clicked')} // Debug log
+                      className="flex items-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       <UserCircleIcon className="h-5 w-5 mr-1 text-gray-600" />
                       {user.role === 'hospital' ? user.data?.name : user.data?.name}
@@ -65,7 +64,7 @@ export default function Navbar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+                      <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                         {user.role === 'hospital' ? (
                           <>
                             <Menu.Item>
@@ -132,13 +131,13 @@ export default function Navbar() {
                   <>
                     <a
                       href="/customer/login"
-                      className="mr-4 rounded-md bg-white px-3 py-2 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-600 hover:bg-blue-50"
+                      className="mr-4 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-600 hover:bg-blue-50"
                     >
                       Customer Login
                     </a>
                     <a
                       href="/hospital/login"
-                      className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-50"
+                      className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-50"
                     >
                       Hospital Login
                     </a>
@@ -146,7 +145,7 @@ export default function Navbar() {
                 )}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-xl p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />

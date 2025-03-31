@@ -41,7 +41,7 @@ function Login() {
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl">
             <div className="flex">
               <div className="flex-shrink-0">
                 <span className="text-red-500 text-xl">⚠</span>

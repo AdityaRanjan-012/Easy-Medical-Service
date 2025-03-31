@@ -17,14 +17,14 @@ export default function LandingPage() {
             <div className="mt-8 flex justify-center gap-4">
               <Link
                 to="/find-ambulance"
-                className="inline-flex items-center px-6 py-3 rounded-md bg-red-600 text-white font-semibold text-sm sm:text-base hover:bg-red-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 rounded-xl bg-red-600 text-white font-semibold text-sm sm:text-base hover:bg-red-700 transition-colors"
               >
                 <TruckIcon className="h-5 w-5 mr-2" />
                 Find an Ambulance
               </Link>
               <Link
                 to="/find-hospital"
-                className="inline-flex items-center px-6 py-3 rounded-md bg-white text-blue-600 font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center px-6 py-3 rounded-xl bg-white text-blue-600 font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-100 transition-colors"
               >
                 <BuildingOffice2Icon className="h-5 w-5 mr-2" />
                 Find a Hospital
@@ -44,7 +44,7 @@ export default function LandingPage() {
         </p>
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {/* Feature 1 */}
-          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
             <TruckIcon className="h-12 w-12 text-blue-600 mx-auto" />
             <h3 className="mt-4 text-xl font-semibold text-gray-900 text-center">
               Instant Ambulance Booking
@@ -54,7 +54,7 @@ export default function LandingPage() {
             </p>
           </div>
           {/* Feature 2 */}
-          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
             <BuildingOffice2Icon className="h-12 w-12 text-blue-600 mx-auto" />
             <h3 className="mt-4 text-xl font-semibold text-gray-900 text-center">
               Hospital Locator
@@ -64,7 +64,7 @@ export default function LandingPage() {
             </p>
           </div>
           {/* Feature 3 */}
-          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
             <PhoneIcon className="h-12 w-12 text-blue-600 mx-auto" />
             <h3 className="mt-4 text-xl font-semibold text-gray-900 text-center">
               24/7 Emergency Support
@@ -86,13 +86,13 @@ export default function LandingPage() {
           <div className="mt-8 flex justify-center gap-4">
             <Link
               to="/find-ambulance"
-              className="inline-flex items-center px-6 py-3 rounded-md bg-white text-blue-600 font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center px-6 py-3 rounded-xl bg-white text-blue-600 font-semibold text-sm sm:text-base shadow-sm hover:bg-gray-100 transition-colors"
             >
               Get an Ambulance
             </Link>
             <Link
               to="/hospital/login"
-              className="inline-flex items-center px-6 py-3 rounded-md bg-red-600 text-white font-semibold text-sm sm:text-base hover:bg-red-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 rounded-xl bg-red-600 text-white font-semibold text-sm sm:text-base hover:bg-red-700 transition-colors"
             >
               Hospital Portal
             </Link>

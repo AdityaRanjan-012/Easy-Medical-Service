@@ -114,7 +114,7 @@ export default function ViewAmbulanceBookings() {
   };
 
   return (
-    <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+    <div className="bg-white shadow-xl rounded-xl overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center">
           <TruckIcon className="h-6 w-6 mr-2 text-blue-600" />
