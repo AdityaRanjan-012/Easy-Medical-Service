@@ -131,16 +131,12 @@ export default function Navbar() {
                   <>
                     <a
                       href="/customer/login"
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="mr-4 rounded-md bg-white px-3 py-2 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-600 hover:bg-blue-50"
                     >
                       Customer Login
                     </a>
                     <a
                       href="/hospital/login"
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-50"
                     >
                       Hospital Login

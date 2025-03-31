@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/userAuthMiddleware');
+const {customerAuth,adminAuth, hospitalAdmin} = require('../middleware/authMiddleware');
 const {
     bookAmbulance,
     getMyBookings,
@@ -9,9 +9,9 @@ const {
 } = require('../controllers/ambulanceBookingController');
 
 // Protected routes (require authentication)
-router.post('/book', protect, bookAmbulance);
-router.get('/my-bookings', protect, getMyBookings);
-router.put('/:id/cancel', protect, cancelBooking);
-router.put('/:id/status', protect, updateBookingStatus);
+router.post('/book', customerAuth, bookAmbulance);
+router.get('/my-bookings', customerAuth, getMyBookings);
+router.put('/:id/cancel', customerAuth, cancelBooking);
+router.put('/:id/status',adminAuth, hospitalAdmin, updateBookingStatus);
 
 module.exports = router; 

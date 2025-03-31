@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, hospitalAdmin } = require('../middleware/authMiddleware');
+const { adminAuth, hospitalAdmin } = require('../middleware/authMiddleware');
 const validateRequest = require('../middleware/validateRequest');
 const {
     addAmbulanceValidation,
@@ -17,9 +17,9 @@ const {
 } = require('../controllers/ambulanceController');
 
 // Hospital admin routes (protected)
-router.post('/', protect, hospitalAdmin, addAmbulance);
-router.put('/:id/status', protect, hospitalAdmin, updateAmbulanceStatus);
-router.delete('/:id', protect, hospitalAdmin, deleteAmbulance);
+router.post('/', adminAuth, hospitalAdmin, addAmbulance);
+router.put('/:id/status', adminAuth, hospitalAdmin, updateAmbulanceStatus);
+router.delete('/:id', adminAuth, hospitalAdmin, deleteAmbulance);
 
 // Public routes
 router.get('/hospital/:hospitalId', getHospitalAmbulances);

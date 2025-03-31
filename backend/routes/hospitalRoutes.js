@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, hospitalAdmin } = require('../middleware/authMiddleware');
+const { adminAuth, hospitalAdmin } = require('../middleware/authMiddleware');
 const validateRequest = require('../middleware/validateRequest');
 const {
     updateHospitalProfileValidation,
@@ -22,8 +22,8 @@ router.post('/login', loginHospital);
 
 // Protected routes
 router.route('/profile')
-    .get(protect, hospitalAdmin, getHospitalProfile)
-    .put(protect, hospitalAdmin, updateHospitalProfile);
+    .get(adminAuth, hospitalAdmin, getHospitalProfile)
+    .put(adminAuth, hospitalAdmin, updateHospitalProfile);
 
 // Public routes
 router.get('/city/:city', getHospitalsByCity);
