@@ -2,6 +2,7 @@ const AmbulanceBooking = require('../models/AmbulanceBooking');
 const Ambulance = require('../models/Ambulance');
 const HospitalProfile = require('../models/HospitalProfile');
 const asyncHandler = require('express-async-handler');
+const { createNotification } = require('./notificationController');
 
 // @desc    Book an ambulance
 // @route   POST /api/ambulance-bookings/book
@@ -33,6 +34,18 @@ exports.bookAmbulance = asyncHandler(async (req, res) => {
         emergencyType,
         status: 'pending'
     });
+
+    // Send notification to hospital
+    await createNotification(
+        ambulance.hospital,
+        'HospitalProfile',
+        req.user._id,
+        'User',
+        booking._id,
+        `New ambulance booking request from ${req.user.name}`,
+        'booking_created'
+    );
+
     // Update ambulance status
     // ambulance.status = 'booked';
     // await ambulance.save();
@@ -108,6 +121,17 @@ exports.cancelBooking = asyncHandler(async (req, res) => {
     booking.status = 'cancelled';
     await booking.save();
 
+    // Send notification to hospital about cancellation
+    await createNotification(
+        booking.hospital,
+        'HospitalProfile',
+        req.user._id,
+        'User',
+        booking._id,
+        `Ambulance booking has been cancelled by ${req.user.name}`,
+        'booking_cancelled'
+    );
+
     res.status(200).json({
         status: 'success',
         data: booking
@@ -152,6 +176,17 @@ exports.updateBookingStatus = asyncHandler(async (req, res) => {
     }
     await ambulance.save();
     await hospital.save();
+
+    // Send notification to user about status update
+    await createNotification(
+        booking.user,
+        'User',
+        req.user._id,
+        'HospitalProfile',
+        booking._id,
+        `Your ambulance booking status has been updated to: ${status}`,
+        'status_updated'
+    );
 
     res.status(200).json({
         status: 'success',

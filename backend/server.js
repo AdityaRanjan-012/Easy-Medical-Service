@@ -11,6 +11,7 @@ const userRoutes = require('./routes/userRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const ambulanceBookingRoutes = require('./routes/ambulanceBookingRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/ambulance-bookings', ambulanceBookingRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // 404 handler
 app.use((req, res) => {
