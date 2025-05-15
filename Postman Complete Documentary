@@ -1,2 +1,478 @@
 This is the Link
 https://.postman.co/workspace/My-Workspace~df127580-7a62-467a-8b83-34df277390db/collection/43345583-e97dbbd3-7a06-40f7-be09-924346c410ad?action=share&creator=43345583
+
+
+GET
+Hospital Profile
+http://localhost:5000/api/hospitals/profile
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+POST
+Register hospital
+http://localhost:5000/api/hospitals/register
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+    "name": "Apollo Hospitals Guwahati",
+    "email": "info.guwahati@apollohospitals.com",
+    "password": "securepassword123",
+    "address": {
+      "street": "Lotus Tower, International Hospitals, GS Rd, Christian Basti",
+      "city": "Guwahati",
+      "state": "Assam",
+      "pincode": "781005"
+    },
+    "contact": {
+      "phone": "+91 361 713 5005",
+      "emergency": "+91-999-000-0001"
+    },
+    "longitude": 91.735556,
+    "latitude": 26.183333
+  }
+Example
+Register hospital
+Request
+View More
+cURL
+curl --location 'http://localhost:5000/api/hospitals/register' \
+--data-raw '{
+    "name": "BijoyNagar Public Hospital",
+    "email": "bijoy2@ac.in",
+    "password": "password123",
+    "address": {
+        "street": "NH32",
+        "city": "Guwahati",
+        "state": "Assam",
+        "pincode": "781141"
+    },
+    "contact": {
+        "phone": "1234567890",
+        "emergency": "9876543210"
+    }
+}'
+201 CREATED
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "_id": "67ec305755cdbb3247a0b800",
+    "name": "BijoyNagar Public Hospital",
+    "email": "bijoy2@ac.in",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWMzMDU3NTVjZGJiMzI0N2EwYjgwMCIsImlhdCI6MTc0MzUzMjExOSwiZXhwIjoxNzQ2MTI0MTE5fQ.W6fE_ZoX1R1UumjP3dCmDEKVZ9ZScNxHzCTIVuiZ83c"
+}
+POST
+Hospital Login
+http://localhost:5000/api/hospitals/login
+﻿
+
+Body
+raw (json)
+json
+{"email": "bijoy2@ac.in",
+    "password": "password123"}
+Example
+Hospital Login
+Request
+cURL
+curl --location 'http://localhost:5000/api/hospitals/login' \
+--data-raw '{"email": "bijoy@ac.in",
+    "password": "password123"}'
+200 OK
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "_id": "67decfcc3ee0576c9caf329c",
+    "name": "Guwahati Medical Care",
+    "email": "bijoy@ac.in",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGVjZmNjM2VlMDU3NmM5Y2FmMzI5YyIsImlhdCI6MTc0MzI3ODQ0MSwiZXhwIjoxNzQ1ODcwNDQxfQ.JaTD_G2Yyuwlr4qJK_bBeb_UjWJWuNn-Kgsc0Pf1XfY"
+}
+PUT
+Update Hospital
+http://localhost:5000/api/hospitals/profile
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "name" : "Guwahati Medical Care"
+}
+POST
+Register user
+http://localhost:5000/api/users/signup
+﻿
+
+Body
+raw (json)
+json
+{
+    "name" : "Ayush Kumar",
+    "email": "ayush@ac.in",
+    "password" : "pass123"
+}
+POST
+User Login
+http://localhost:5000/api/users/login
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "email":"ayush@ac.in",
+    "password": "pass123"
+}
+Example
+User Login
+Request
+cURL
+curl --location 'http://localhost:5000/api/users/login' \
+--data-raw '{
+    "email":"ayush@ac.in",
+    "password": "pass123"
+}'
+200 OK
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGVkM2ZkNjlmOGM1ODY4ZGJkNzZkMyIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc0Mjg0NTUzOCwiZXhwIjoxNzQyODQ5MTM4fQ.IcPYHB0XW1Suz6gICWXqMdsECzloitXthRLRHXo-YVI",
+    "user": {
+        "id": "67ded3fd69f8c5868dbd76d3",
+        "name": "Ayush Kumar",
+        "email": "ayush@ac.in",
+        "role": "customer"
+    }
+}
+POST
+Add Ambulances
+http://localhost:5000/api/ambulances/
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "vehicleNumber": "BR03432",
+    "contactNumber": "2342423"
+}
+GET
+Find Hospital in city
+http://localhost:5000/api/hospitals/city/Guwahati
+﻿
+
+POST
+User book ambulance
+http://localhost:5000/api/ambulance-bookings/book
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "ambulanceId":"67ded7da5b56ed71bc6d8310",
+    "pickupLocation": "Guwahati",
+    "patientAge":"34",
+    "emergencyType":"emergency"
+
+}
+Example
+User book ambulance
+Request
+cURL
+curl --location 'http://localhost:5000/api/ambulance-bookings/book' \
+--data '{
+    "ambulanceId":"67ded7da5b56ed71bc6d8310",
+    "pickupLocation": "Guwahati",
+    "patientAge":"34",
+    "emergencyType":"emergency"
+
+}'
+201 CREATED
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "status": "success",
+    "data": {
+        "hospital": "67decfcc3ee0576c9caf329c",
+        "ambulance": "67ded7da5b56ed71bc6d8310",
+        "user": "67ded3fd69f8c5868dbd76d3",
+        "pickupLocation": "Guwahati",
+        "patientAge": 34,
+        "emergencyType": "emergency",
+        "status": "pending",
+        "_id": "67ea9e0d6a617a513aa5f032",
+        "createdAt": "2025-03-31T13:52:13.401Z",
+        "updatedAt": "2025-03-31T13:52:13.401Z",
+        "__v": 0
+    }
+}
+GET
+User Profile
+http://localhost:5000/api/users/profile
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Example
+Z
+Request
+cURL
+curl --location 'http://localhost:5000/api/users/profile'
+200 OK
+Response
+Body
+Headers (8)
+json
+{
+    "id": "67ded3fd69f8c5868dbd76d3",
+    "name": "Ayush Kumar",
+    "email": "ayush@ac.in",
+    "phone": "",
+    "address": "",
+    "role": "customer"
+}
+GET
+User get booking ambulance
+http://localhost:5000/api/ambulance-bookings/my-bookings
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "ambulanceId":"67ded7da5b56ed71bc6d8310",
+    "pickupLocation": "Guwahati",
+    "patientAge":"34",
+    "emergencyType":"emergency"
+
+}
+Example
+User get booking ambulance
+Request
+cURL
+curl --location --request GET 'http://localhost:5000/api/ambulance-bookings/my-bookings' \
+--data '{
+    "ambulanceId":"67ded7da5b56ed71bc6d8310",
+    "pickupLocation": "Guwahati",
+    "patientAge":"34",
+    "emergencyType":"emergency"
+
+}'
+200 OK
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "status": "success",
+    "count": 1,
+    "data": [
+        {
+            "_id": "67e1ab95d22a811ab0416e67",
+            "ambulance": {
+                "_id": "67ded7da5b56ed71bc6d8310",
+                "hospital": "67decfcc3ee0576c9caf329c",
+                "vehicleNumber": "G23242",
+                "contactNumber": "2342423",
+                "status": "Booked",
+                "createdAt": "2025-03-22T15:31:38.774Z",
+                "updatedAt": "2025-03-24T18:59:33.551Z",
+                "__v": 0
+            },
+            "user": "67ded3fd69f8c5868dbd76d3",
+            "pickupLocation": "Guwahati",
+            "patientAge": 34,
+            "emergencyType": "emergency",
+            "status": "pending",
+            "createdAt": "2025-03-24T18:59:33.514Z",
+            "updatedAt": "2025-03-24T18:59:33.514Z",
+            "__v": 0
+        }
+    ]
+}
+PUT
+Cancel ambulance booking
+http://localhost:5000/api/ambulance-bookings/67e1ab95d22a811ab0416e67/cancel
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+PUT
+Confirm Ambulance Book by Hospital Admin
+http://localhost:5000/api/ambulance-bookings/67eaa19bc2370914014d452b/status
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "status":"confirmed"
+}
+Example
+Confirm Ambulance Book by Hospital Admin
+Request
+View More
+cURL
+curl --location --request PUT 'http://localhost:5000/api/ambulance-bookings/67e1ab95d22a811ab0416e67/status' \
+--data '{
+    "status":"confirmed"
+}'
+200 OK
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "status": "success",
+    "data": {
+        "_id": "67e1ab95d22a811ab0416e67",
+        "ambulance": "67ded7da5b56ed71bc6d8310",
+        "user": "67ded3fd69f8c5868dbd76d3",
+        "pickupLocation": "Guwahati",
+        "patientAge": 34,
+        "emergencyType": "emergency",
+        "status": "confirmed",
+        "createdAt": "2025-03-24T18:59:33.514Z",
+        "updatedAt": "2025-03-29T20:04:10.860Z",
+        "__v": 0
+    }
+}
+GET
+Find all booking for ambulance (by hospital admin)
+http://localhost:5000/api/ambulance-bookings/hospital
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Example
+Find all booking for ambulance (by hospital admin)
+Request
+cURL
+curl --location 'http://localhost:5000/api/ambulance-bookings/hospital'
+200 OK
+Response
+Body
+Headers (8)
+View More
+json
+{
+    "status": "success",
+    "count": 1,
+    "data": [
+        {
+            "_id": "67eaa19bc2370914014d452b",
+            "hospital": "67decfcc3ee0576c9caf329c",
+            "ambulance": {
+                "_id": "67e1acb2f95180400cfa922e",
+                "hospital": "67decfcc3ee0576c9caf329c",
+                "vehicleNumber": "BRO3",
+                "contactNumber": "07209640023",
+                "status": "booked",
+                "createdAt": "2025-03-24T19:04:18.562Z",
+                "updatedAt": "2025-03-31T14:07:23.921Z",
+                "__v": 0
+            },
+            "user": {
+                "_id": "67ded3fd69f8c5868dbd76d3",
+                "name": "Ayush Kumar",
+                "email": "ayush@ac.in",
+                "phone": "9546053231"
+            },
+            "pickupLocation": "Kamrup",
+            "patientAge": 22,
+            "emergencyType": "emergency",
+            "status": "confirmed",
+            "createdAt": "2025-03-31T14:07:23.913Z",
+            "updatedAt": "2025-03-31T14:19:22.764Z",
+            "__v": 0
+        }
+    ]
+}
+PUT
+update booking status (by admin)
+http://localhost:5000/api/ambulance-bookings/67eaa19bc2370914014d452b/status
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+Body
+raw (json)
+json
+{
+    "status" : "confirmed"
+}
+GET
+Get Notifications (for both customer and Hospital)
+http://localhost:5000/api/notifications
+﻿
+
+Authorization
+Bearer Token
+Token
+<token>
+POST
+Nearby Hospital Fetch
+http://localhost:5000/api/hospitals/nearby
+﻿
+
+Body
+raw (json)
+json
+{
+  "latitude": 26.15096,
+  "longitude": 91.69446,
+  "radius": 5000000000
+}
